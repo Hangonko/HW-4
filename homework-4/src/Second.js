@@ -18,14 +18,15 @@ function Component() {
     return calculated;
   };
 
-  const inputOnChange = (e) => {
-    console.log(e.target.value);
+  const [name, setName] = useState("");
 
-    return e.target.value;
+  const inputOnChange = (e) => {
+    setName(e.target.value);
+    console.log(name);
   };
 
   const initValues = {
-    userName: "",
+    userName: name,
     age: randAge(10, 60),
     id: randID,
   };
@@ -63,7 +64,7 @@ function Component() {
           </React.Fragment>
         );
       })}
-      <input type="text" placeholder="Username" onChange={inputOnChange} />
+      <input value={name} placeholder="Username" onChange={inputOnChange} />
       <button onClick={addUser}>add</button>
     </>
   );
