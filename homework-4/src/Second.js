@@ -1,54 +1,40 @@
 import React, { useState } from "react";
 
 const Second = () => {
-  return (
-    <>
-      <Component />
-    </>
-  );
-};
-
-export default Second;
-
-function Component() {
   const randID = new Date().valueOf();
+  const [name, setName] = useState("");
+  const [users, setUsers] = useState([]);
 
   const randAge = (min, max) => {
     const calculated = Math.floor(Math.random() * (max - min)) + min;
     return calculated;
   };
 
-  const [name, setName] = useState("");
-
-  const inputOnChange = (e) => {
-    setName(e.target.value);
-    console.log(name);
-  };
-
-  const initValues = {
-    userName: name,
-    age: randAge(10, 60),
-    id: randID,
-  };
-
-  const user = () => {
+  const user = (preValue) => {
     return [
+      ...preValue,
       {
-        name: initValues.userName,
-        age: initValues.age,
-        userID: initValues.id,
+        name: name,
+        age: randAge(10, 60),
+        userID: randID,
       },
     ];
   };
 
-  const [users, setUsers] = useState([]);
-
   const addUser = () => {
-    setUsers(user());
+    setUsers(user);
   };
 
-  console.log(users);
+  const deleteUser = (userID) => {
+    setUsers((previous) => {
+      const filterUsers = previous.filter((user) => user.userID !== userID);
+      return filterUsers;
+    });
+  };
 
+  const updateUser = () => {};
+
+  console.log(users);
   return (
     <>
       {users.map((user) => {
@@ -56,16 +42,37 @@ function Component() {
         return (
           <React.Fragment key={userID}>
             <div>
-              <p>{name}</p>
-              <p>{age}</p>
-              <button>Delete</button>
-              <button>Update</button>
+              <p>
+                {name} {age}
+              </p>
+              <button
+                onClick={() => {
+                  deleteUser(userID);
+                }}
+              >
+                Delete
+              </button>
+              <button
+                onClick={() => {
+                  updateUser(userID);
+                }}
+              >
+                Update
+              </button>
             </div>
           </React.Fragment>
         );
       })}
-      <input value={name} placeholder="Username" onChange={inputOnChange} />
+      <input
+        value={name}
+        placeholder="Username"
+        onChange={(e) => {
+          setName(e.target.value);
+        }}
+      />
       <button onClick={addUser}>add</button>
     </>
   );
-}
+};
+
+export default Second;
